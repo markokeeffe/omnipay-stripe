@@ -98,4 +98,24 @@ class AbstractRequestTest extends TestCase
 
         $this->assertTrue($httpRequest->hasHeader('Stripe-Account'));
     }
+
+    public function testStripeVersion()
+    {
+        $this->request->setStripeVersionHeader('2018-01-23');
+
+        $this->assertSame('2018-01-23', $this->request->getStripeVersionHeader());
+
+        $headers = $this->request->getHeaders();
+
+        $this->assertArrayHasKey('Stripe-Version', $headers);
+        $this->assertSame('2018-01-23', $headers['Stripe-Version']);
+
+        $httpRequest = new Request(
+            'GET',
+            '/',
+            $headers
+        );
+
+        $this->assertTrue($httpRequest->hasHeader('Stripe-Version'));
+    }
 }
